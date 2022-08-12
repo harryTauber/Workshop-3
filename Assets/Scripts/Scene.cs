@@ -37,11 +37,26 @@ public class Scene : MonoBehaviour
         this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(0f, 0f)), Color.blue);
         
         // Add more rays to visualise here...
+        this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(1f, 0f)), Color.blue);
+        this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(0f, 1f)), Color.blue);
+        this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(1f, 1f)), Color.blue);
+
+        for (int i=1; i<=this.image.Width; i++) {
+            for (int j=1; j<=this.image.Height; j++) {
+                generateRay(i,j);
+            }
+        }
     }
 
     private void Render()
     {
         // Render the image here...
+        for (int i=0; i<this.image.Width; i++) {
+            for (int j=0; j<this.image.Height; j++) {
+                this.image.SetPixel(i,j,Color.black);
+            }
+        }
+
     }
 
     private Vector3 NormalizedImageToWorldCoord(float x, float y)
@@ -66,5 +81,9 @@ public class Scene : MonoBehaviour
     {
         this.image.transform.position = new Vector3(0f, 0f, 1f);
         this.image.transform.localScale = new Vector3(this._imagePlaneWidth, this._imagePlaneHeight, 0f);
+    }
+
+    private void generateRay(int i,int j) {
+        this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord((float) (i-.5)/this.image.Width, (float) (j-0.5)/this.image.Height)), Color.white);
     }
 }
