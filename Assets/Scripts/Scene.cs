@@ -26,7 +26,7 @@ public class Scene : MonoBehaviour
         Render();
         
         // Add additional visualisations to help debug things.
-        DebugVisualisations();
+        //DebugVisualisations();
     }
 
     private void DebugVisualisations()
@@ -37,11 +37,36 @@ public class Scene : MonoBehaviour
         this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(0f, 0f)), Color.blue);
         
         // Add more rays to visualise here...
+        this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(1f, 0f)), Color.blue);
+        this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(0f, 1f)), Color.blue);
+        this.debug.Ray(new Ray(Vector3.zero, NormalizedImageToWorldCoord(1f, 1f)), Color.blue);
+
+        
     }
 
     private void Render()
     {
         // Render the image here...
+        for (int i=0; i<this.image.Width; i++) {
+            for (int j=0; j<this.image.Height; j++) {
+
+                this.image.SetPixel(i, j, Color.black);
+                var ray = generateRay(i,j);
+                this.debug.Ray(ray,Color.white);
+                RaycastHit? nearestHit = null;
+
+                foreach (var sceneEntity in FindObjectsOfType<SceneEntity>()) {
+                var hit = sceneEntity.Intersect(ray);
+                if (hit != null && (hit?.distance < nearestHit?.distance || nearestHit == null))
+                {
+                    this.image.SetPixel(i, j, sceneEntity.Color());
+                    nearestHit = hit;
+                }
+}
+                
+            }
+        }
+
     }
 
     private Vector3 NormalizedImageToWorldCoord(float x, float y)
@@ -66,5 +91,9 @@ public class Scene : MonoBehaviour
     {
         this.image.transform.position = new Vector3(0f, 0f, 1f);
         this.image.transform.localScale = new Vector3(this._imagePlaneWidth, this._imagePlaneHeight, 0f);
+    }
+
+    private Ray generateRay(int i,int j) {
+        return new Ray(Vector3.zero, NormalizedImageToWorldCoord((float) (i-.5)/this.image.Width, (float) (j-0.5)/this.image.Height));
     }
 }
