@@ -52,7 +52,7 @@ public class Scene : MonoBehaviour
 
                 this.image.SetPixel(i, j, Color.black);
                 var ray = generateRay(i,j);
-                this.debug.Ray(ray,Color.white);
+                //this.debug.Ray(ray,Color.white);
                 RaycastHit? nearestHit = null;
 
                 foreach (var sceneEntity in FindObjectsOfType<SceneEntity>()) {
