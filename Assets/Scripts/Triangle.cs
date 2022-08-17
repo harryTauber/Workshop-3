@@ -6,28 +6,27 @@ using UnityEngine;
 public class Triangle : SceneEntity
 {
     [SerializeField] private Vector3 v1, v2, v3;
-    [SerializeField] private Vector3 center;
-    [SerializeField] private Vector3 normal;
-    
-    public Vector3 Center => this.center;
-    public Vector3 Normal => this.normal;
-    
 
     public override RaycastHit? Intersect(Ray ray)
     {
         // By default we use the Unity engine for ray-entity collisions.
         // See the parent 'SceneEntity' class definition for details.
         // Task: Replace with your own intersection computations.
-        //var normal = Vector3.Cross(v2-v1,v3-v2);
+        
+        var normal  = Vector3.Cross(v2-v1,v3-v2);
         var denom = Vector3.Dot(ray.direction,normal);
-
+        var c1 = (v1.x+v2.x+v3.x)/3;
+        var c2 = (v1.y +v2.y +v3.y)/3;
+        var c3 = (v1.z +v2.z +v3.z)/3;
+        
+        var center = new Vector3(c1,c2,c3);
         if (Mathf.Abs(denom) > float.Epsilon) {
             var t = Vector3.Dot(center-ray.origin,normal)/denom;
 
             if (t>float.Epsilon) {
         
                 var hitPos = ray.GetPoint(t);
-                if (rayInTriangle(hitPos)) {
+                if (rayInTriangle(hitPos, normal)) {
                     
                     return new RaycastHit{
                         distance = (hitPos-center).magnitude
@@ -44,7 +43,7 @@ public class Triangle : SceneEntity
         return new[] { this.v1, this.v2, this.v3 };
     }
 
-    private bool rayInTriangle(Vector3 P) {
+    private bool rayInTriangle(Vector3 P, Vector3 normal) {
         var edge1 = v2-v1;
         var edge2 = v3-v2;
         var edge3 = v1-v3;
@@ -59,4 +58,19 @@ public class Triangle : SceneEntity
             }
         return false;
     }
+    public Vector3 CenterOfVectors( Vector3[] vectors ) {
+     Vector3 sum = Vector3.zero;
+     if( vectors == null || vectors.Length == 0 )
+     {
+         return sum;
+     }
+ 
+     foreach( Vector3 vec in vectors )
+     {
+         sum += vec;
+     }
+     return sum/vectors.Length;
+ }
 }
+
+
