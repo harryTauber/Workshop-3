@@ -18,10 +18,10 @@ public class Plane : SceneEntity
         // Task: Replace with your own intersection computations.
         var denom = Vector3.Dot(ray.direction,normal);
 
-        if (Mathf.Abs(denom) > 0) {
+        if (Mathf.Abs(denom) > float.Epsilon) {
             var t = Vector3.Dot(center-ray.origin,normal)/denom;
 
-            if (Mathf.Abs(t)>0) {
+            if (t>float.Epsilon) {
                 var hitPos = ray.GetPoint(t);
                 return new RaycastHit {
                     distance = (hitPos-center).magnitude
