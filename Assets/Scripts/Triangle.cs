@@ -58,19 +58,7 @@ public class Triangle : SceneEntity
             }
         return false;
     }
-    public Vector3 CenterOfVectors( Vector3[] vectors ) {
-     Vector3 sum = Vector3.zero;
-     if( vectors == null || vectors.Length == 0 )
-     {
-         return sum;
-     }
- 
-     foreach( Vector3 vec in vectors )
-     {
-         sum += vec;
-     }
-     return sum/vectors.Length;
- }
+   
 }
 
 
